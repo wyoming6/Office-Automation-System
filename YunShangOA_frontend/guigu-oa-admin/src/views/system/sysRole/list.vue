@@ -16,10 +16,7 @@
         </el-row>
       </el-form>
     </div>
-    <!-- “添加”按钮 -->
-    <div class="tools-div">
-        <el-button type="success" icon="el-icon-plus" size="mini" @click="add">添 加</el-button>
-    </div>
+    
     <!-- 表格渲染 -->
     <el-table
       v-loading="listLoading"
@@ -50,7 +47,11 @@
         </template>
       </el-table-column>
     </el-table>
-
+    <!-- “添加” "批量删除" 按钮 -->
+    <div class="tools-div">
+        <el-button type="success" icon="el-icon-plus" size="mini" @click="add">添 加</el-button>
+        <el-button class="btn-add" size="mini" @click="batchRemove()" >批量删除</el-button>
+    </div>
     <!-- 分页组件 -->
     <el-pagination
         :current-page="page"
@@ -89,7 +90,7 @@ export default {
         page: 1, // 页码
         limit: 10, // 每页记录数
         searchObj: {}, // 查询条件
-        // multipleSelection: []// 批量删除选中的记录列表
+        multipleSelections: [],// 表格中选中的数据
 
         dialogVisible:false, //是否弹窗
         sysRole:{} //封装表单角色数据
@@ -168,6 +169,38 @@ export default {
         this.dialogVisible=false //关闭弹窗
         this.fetchData() //刷新页面
       })
+    },
+
+    //传递被选中行的数据
+    handleSelectionChange(selection){
+      this.multipleSelections=selection
+
+    },
+
+    //批量删除
+    batchRemove(){
+      if(this.multipleSelections.length == 0){
+        this.$message.warning('请选择要删除的记录！')
+        return
+      }
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        var idList=[]
+        this.multipleSelections.forEach(element => {
+            var id = element.id
+            idList.push(id)
+        });
+        return api.batchRemove(idList)
+    }).then(response => {
+        this.fetchData()
+        this.$message.success(response.message)
+        
+    })
+
+
     }
     
   }
