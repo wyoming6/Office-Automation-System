@@ -3,9 +3,10 @@ package com.atguigu.auth.controller;
 import com.atguigu.auth.service.SysMenuService;
 import com.atguigu.common.result.Result;
 import com.atguigu.model.system.SysMenu;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.atguigu.vo.system.AssignMenuVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -45,6 +46,28 @@ public class SysMenuController {
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
         sysMenuService.removeMenuById(id);
+        return Result.ok();
+    }
+
+    /**
+     * 查询所有的菜单；查询角色被分配的菜单
+     * @param roleId
+     * @return
+     */
+    @GetMapping("toAssign/{roleId}")
+    public Result toAssign(@PathVariable Long roleId) {
+        List<SysMenu> list = sysMenuService.findSysMenuByRoleId(roleId);
+        return Result.ok(list);
+    }
+
+    /**
+     * 给角色分配菜单
+     * @param assignMenuVo
+     * @return
+     */
+    @PostMapping("/doAssign")
+    public Result doAssign(@RequestBody AssignMenuVo assignMenuVo) {
+        sysMenuService.doAssign(assignMenuVo);
         return Result.ok();
     }
 }

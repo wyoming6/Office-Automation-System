@@ -5,7 +5,7 @@ import com.atguigu.auth.service.SysRoleService;
 import com.atguigu.auth.service.SysUserRoleService;
 import com.atguigu.model.system.SysRole;
 import com.atguigu.model.system.SysUserRole;
-import com.atguigu.vo.system.AssginRoleVo;
+import com.atguigu.vo.system.AssignRoleVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,37 +39,37 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<Long> existRoleIDList = existUserRoleList.stream().map(c -> c.getRoleId()).collect(Collectors.toList());
 
         //根据角色id找到对应角色的信息
-        List<SysRole> assginRoleList = new ArrayList<>();
+        List<SysRole> assignRoleList = new ArrayList<>();
         for (SysRole role : allRolesList) {
             if(existRoleIDList.contains(role.getId())) {
-                assginRoleList.add(role);
+                assignRoleList.add(role);
             }
         }
 
         //封装数据到Map中
         Map<String, Object> roleMap = new HashMap<>();
-        roleMap.put("assginRoleList", assginRoleList);
+        roleMap.put("assignRoleList", assignRoleList);
         roleMap.put("allRolesList", allRolesList);
         return roleMap;
     }
 
     /**
      * 为用户分配角色（一个用户可能有多个角色）
-     * @param assginRoleVo
+     * @param assignRoleVo
      */
     @Override
-    public void doAssign(AssginRoleVo assginRoleVo) {
+    public void doAssign(AssignRoleVo assignRoleVo) {
         //删除用户的旧角色
         LambdaQueryWrapper<SysUserRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysUserRole::getUserId, assginRoleVo.getUserId());
+        wrapper.eq(SysUserRole::getUserId, assignRoleVo.getUserId());
         sysUserRoleService.remove(wrapper);
 
         //给用户分配新角色
-        List<Long> roleIdList = assginRoleVo.getRoleIdList();
+        List<Long> roleIdList = assignRoleVo.getRoleIdList();
         for(Long roleId : roleIdList) {
             if(StringUtils.isEmpty(roleId)) continue;
             SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setUserId(assginRoleVo.getUserId());
+            sysUserRole.setUserId(assignRoleVo.getUserId());
             sysUserRole.setRoleId(roleId);
             sysUserRoleService.save(sysUserRole);
         }
