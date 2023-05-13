@@ -75,7 +75,7 @@ public class IndexController {
         String token = request.getHeader("token");
 
         //从token中获取用户id、用户名称
-        Long userId = 1L; //JwtHelper.getUserId(token);
+        Long userId = JwtHelper.getUserId(token);
 
         //从数据库提取用户
         SysUser sysUser = sysUserService.getById(userId);
