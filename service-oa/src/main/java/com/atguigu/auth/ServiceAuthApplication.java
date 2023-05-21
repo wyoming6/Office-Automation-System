@@ -13,10 +13,5 @@ public class ServiceAuthApplication {
 
         SpringApplication.run(ServiceAuthApplication.class, args);
 
-//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ServiceAuthApplication.class);
-//
-//        for (String beanName : context.getBeanDefinitionNames()) {
-//            System.out.println(beanName);
-//        }
     }
 }
