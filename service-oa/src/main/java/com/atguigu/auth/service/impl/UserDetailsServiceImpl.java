@@ -34,12 +34,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new RuntimeException("账号已停用");
         }
 
-//        List<String> userPermsList = sysMenuService.findPermsByUserID(sysUser.getId());
-//        List<SimpleGrantedAuthority> auth = new ArrayList<>();
-//        for (String perm : userPermsList) {
-//            auth.add(new SimpleGrantedAuthority(perm.trim()));
-//        }
-//        return new CustomUser(sysUser, auth);
-        return new CustomUser(sysUser, Collections.emptyList());
+        List<String> userPermsList = sysMenuService.findPermsByUserID(sysUser.getId());
+        List<SimpleGrantedAuthority> auth = new ArrayList<>();
+        for (String perm : userPermsList) {
+            auth.add(new SimpleGrantedAuthority(perm.trim()));
+        }
+        return new CustomUser(sysUser, auth);
+//        return new CustomUser(sysUser, Collections.emptyList());
     }
 }

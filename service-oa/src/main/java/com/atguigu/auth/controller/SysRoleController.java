@@ -33,7 +33,7 @@ public class SysRoleController {
 //    }
 
     //return all roles
-//    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
+    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
     @GetMapping("/findAll")
     public Result findAll(){
         List<SysRole> list = sysRoleService.list();
@@ -54,7 +54,7 @@ public class SysRoleController {
      * @param sysRoleQueryVo 条件对象
      * @return
      */
-//    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
+    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
     @GetMapping("{page}/{limit}")
     public Result pageQueryRole(@PathVariable Long page,
                                 @PathVariable Long limit,
@@ -77,7 +77,7 @@ public class SysRoleController {
     //以下这种方式也可以：
     //public Result save(SysRole role)
     //@GetMapping("save")
-//    @PreAuthorize("hasAuthority('bnt.sysRole.add')")
+    @PreAuthorize("hasAuthority('bnt.sysRole.add')")
     @PostMapping("save")
     public Result save(@RequestBody SysRole role){
         boolean isSaved = sysRoleService.save(role);
@@ -92,7 +92,7 @@ public class SysRoleController {
      * @param id 角色id
      * @return
      */
-//    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
+    @PreAuthorize("hasAuthority('bnt.sysRole.list')")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id){
         SysRole byId = sysRoleService.getById(id);
@@ -104,7 +104,7 @@ public class SysRoleController {
      * @param role 角色
      * @return
      */
-//    @PreAuthorize("hasAuthority('bnt.sysRole.update')")
+    @PreAuthorize("hasAuthority('bnt.sysRole.update')")
     @PutMapping("update")
     public Result update(@RequestBody SysRole role){
         boolean isSuccessful = sysRoleService.updateById(role);
@@ -119,7 +119,7 @@ public class SysRoleController {
      * @param id
      * @return
      */
-//    @PreAuthorize("hasAuthority('bnt.sysRole.remove')")
+    @PreAuthorize("hasAuthority('bnt.sysRole.remove')")
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id){
         boolean isSuccessful = sysRoleService.removeById(id);
@@ -135,7 +135,7 @@ public class SysRoleController {
      * @param idList
      * @return
      */
-//    @PreAuthorize("hasAuthority('bnt.sysRole.remove')")
+    @PreAuthorize("hasAuthority('bnt.sysRole.remove')")
     @DeleteMapping("batchRemove")
     public Result batchRemove(@RequestBody List<Long> idList){
         boolean isSuccessful = sysRoleService.removeByIds(idList);

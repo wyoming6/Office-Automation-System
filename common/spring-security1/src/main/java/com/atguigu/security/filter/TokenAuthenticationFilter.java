@@ -79,7 +79,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 //                //把权限数据由字符串转为集合List<SimpleGrantedAuthority>
 //                if(!StringUtils.isEmpty(authString)){
 //                    List<Map> mapList = JSON.parseArray(authString, Map.class);
-//                    System.out.println("mapList:\n");
+//                    System.out.println("检测:\n");
 //                    System.out.println(mapList);
 //                    List<SimpleGrantedAuthority> authList = new ArrayList<>();
 //                    for (Map map : mapList) {
