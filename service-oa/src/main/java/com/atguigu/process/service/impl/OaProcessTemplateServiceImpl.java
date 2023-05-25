@@ -3,6 +3,7 @@ package com.atguigu.process.service.impl;
 import com.atguigu.model.process.ProcessTemplate;
 import com.atguigu.model.process.ProcessType;
 import com.atguigu.process.mapper.OaProcessTemplateMapper;
+import com.atguigu.process.service.OaProcessService;
 import com.atguigu.process.service.OaProcessTemplateService;
 import com.atguigu.process.service.OaProcessTypeService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -20,6 +21,9 @@ import java.util.List;
 public class OaProcessTemplateServiceImpl extends ServiceImpl<OaProcessTemplateMapper, ProcessTemplate> implements OaProcessTemplateService {
     @Autowired
     private OaProcessTypeService processTypeService;
+
+    @Autowired
+    private OaProcessService oaProcessService;
 
     @Override
     public IPage<ProcessTemplate> selectPageProcessTempate(Page<ProcessTemplate> pageParam) {
@@ -53,6 +57,9 @@ public class OaProcessTemplateServiceImpl extends ServiceImpl<OaProcessTemplateM
         processTemplate.setStatus(1);
         baseMapper.updateById(processTemplate);
 
-        //todo: to be continued
+        //流程定义部署
+        if(!StringUtils.isEmpty(processTemplate.getProcessDefinitionPath())) {
+            oaProcessService.deployByZip(processTemplate.getProcessDefinitionPath());
+        }
     }
 }
