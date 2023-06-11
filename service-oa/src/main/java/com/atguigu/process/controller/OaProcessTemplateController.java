@@ -87,6 +87,12 @@ public class OaProcessTemplateController {
         return Result.ok();
     }
 
+    /**
+     * 上传流程定义
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     */
     @PostMapping("/uploadProcessDefinition")
     public Result uploadProcessDefinition(MultipartFile file) throws FileNotFoundException {
         //获取classes目录位置
@@ -116,7 +122,11 @@ public class OaProcessTemplateController {
         return Result.ok(map);
     }
 
-    //部署流程定义（发布）
+    /**
+     * 部署流程定义（发布）
+     * @param id
+     * @return
+     */
     @GetMapping("/publish/{id}")
     public Result publish(@PathVariable Long id) {
         //流程定义部署

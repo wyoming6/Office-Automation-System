@@ -7,7 +7,7 @@ function param2Obj(url) {
   if (!search) {
     return {}
   }
-  const obj = {}
+  const obj = {} 
   const searchArr = search.split('&')
   searchArr.forEach(v => {
     const index = v.indexOf('=')

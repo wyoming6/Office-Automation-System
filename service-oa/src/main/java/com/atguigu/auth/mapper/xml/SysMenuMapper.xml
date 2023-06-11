@@ -13,7 +13,7 @@
     </sql>
 
 
-    <select id="findMenusByUserID" resultMap="sysMenuMap">
+    <select id="findMenuListByUserID" resultMap="sysMenuMap">
         select
         distinct <include refid="columns" />
         from sys_menu m

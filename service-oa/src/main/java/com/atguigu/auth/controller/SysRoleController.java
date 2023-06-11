@@ -37,11 +37,11 @@ public class SysRoleController {
     @GetMapping("/findAll")
     public Result findAll(){
         List<SysRole> list = sysRoleService.list();
-        try{
-            int i = 10/0;
-        }catch(Exception e){
-            throw new GuiguException(20001, "执行自定义异常处理");
-        }
+//        try{
+//            int i = 10/0;
+//        }catch(Exception e){
+//            throw new GuiguException(20001, "执行自定义异常处理");
+//        }
 
         return Result.ok(list);
     }

@@ -5,6 +5,8 @@ import com.atguigu.common.jwt.JwtHelper;
 import com.atguigu.common.result.ResponseUtil;
 import com.atguigu.common.result.Result;
 import com.atguigu.common.result.ResultCodeEnum;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-//    private RedisTemplate redisTemplate;
-//    public TokenAuthenticationFilter(RedisTemplate redisTemplate){
-//        this.redisTemplate = redisTemplate;
-//    }
+    private RedisTemplate redisTemplate;
+    public TokenAuthenticationFilter(RedisTemplate redisTemplate){
+        this.redisTemplate = redisTemplate;
+    }
 
     public TokenAuthenticationFilter(){
     }
@@ -55,7 +57,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(request, response);
         } else {
-            ResponseUtil.out(response, Result.build(null, ResultCodeEnum.LOGIN_ERROR));
+            ResponseUtil.out(response, Result.build(null, ResultCodeEnum.AUTH_ERROR));
         }
     }
 
@@ -69,27 +71,35 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         if (!StringUtils.isEmpty(token)) {
             String username = JwtHelper.getUsername(token);
-            if (!StringUtils.isEmpty(username)) {
-                return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
-            }
-
 //            if (!StringUtils.isEmpty(username)) {
-//                //从redis获取权限数据
-//                String authString = (String) redisTemplate.opsForValue().get(username);
-//                //把权限数据由字符串转为集合List<SimpleGrantedAuthority>
-//                if(!StringUtils.isEmpty(authString)){
+//                return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+//            }
+
+            if (!StringUtils.isEmpty(username)) {
+                //从redis获取权限数据
+                String authString = (String) redisTemplate.opsForValue().get(username);
+                System.out.println("Redis返回权限数据：\n");
+                System.out.println(authString);
+                //把权限数据由字符串转为集合List<SimpleGrantedAuthority>
+                if(!StringUtils.isEmpty(authString)){
+                    List<SimpleGrantedAuthority> authList = new ArrayList<>();
+
 //                    List<Map> mapList = JSON.parseArray(authString, Map.class);
-//                    System.out.println("检测:\n");
-//                    System.out.println(mapList);
-//                    List<SimpleGrantedAuthority> authList = new ArrayList<>();
 //                    for (Map map : mapList) {
 //                        authList.add(new SimpleGrantedAuthority((String)map.get("authority")));
 //                    }
-//                    return new UsernamePasswordAuthenticationToken(username, null, authList);
-//                }else{
-//                    return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
-//                }
-//            }
+
+                    Gson gson = new Gson();
+                    List<Map> mapList = gson.fromJson(authString, new TypeToken<List<Map>>() {}.getType());
+
+                    for(Map map : mapList){
+                        authList.add(new SimpleGrantedAuthority((String)map.get("role")));
+                    }
+                    return new UsernamePasswordAuthenticationToken(username, null, authList);
+                }else{
+                    return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                }
+            }
         }
         return null;
     }

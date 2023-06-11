@@ -107,7 +107,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             wrapper.orderByAsc(SysMenu::getSortValue);
             sysMenus = baseMapper.selectList(wrapper);
         }else{ //1.2 如果不是管理员，根据userId查询可以操作的菜单
-            sysMenus = baseMapper.findMenusByUserID(userId);
+            sysMenus = baseMapper.findMenuListByUserID(userId);
         }
 
         //2.将查询出的数据构建成框架要求的路由结构
@@ -189,7 +189,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             wrapper.eq(SysMenu::getStatus, 1);
             sysMenus = baseMapper.selectList(wrapper);
         }else{ //1.2 如果不是管理员，根据userId查询可以操作的按钮
-            sysMenus = baseMapper.findMenusByUserID(userId);
+            sysMenus = baseMapper.findMenuListByUserID(userId);
         }
 
         //2.获取用户可操作的按钮
